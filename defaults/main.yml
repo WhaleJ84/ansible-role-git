@@ -1,0 +1,4 @@
+---
+git_config_paths:
+  - "{{ ansible_user_dir }}/.gitconfig"
+  - "{{ ansible_user_dir }}/.config/git/config"
