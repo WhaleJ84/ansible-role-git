@@ -1,0 +1,155 @@
+---
+- name: INSTALL | git
+  tags:
+    - install
+  block:
+    - name: INSTALL | Ensure git is installed
+      become: True
+      ansible.builtin.apt:
+        name: git
+        state: present
+
+- name: CONFIGURE | git
+  tags:
+    - configure
+  block:
+    - name: CONFIGURE | Determine config location
+      loop: "{{ git_config_paths }}"
+      ansible.builtin.stat:
+        path: "{{ item }}"
+      register: path_checks
+      ignore_errors: True
+
+    - name: CONFIGURE | Set found config to variable
+      with_items: "{{ path_checks.results }}"
+      ansible.builtin.set_fact:
+        git_config: "{{ item.stat.path }}"
+      when: item.stat.exists
+
+    - name: CONFIGURE | Ensure config path exists
+      ansible.builtin.file:
+        path: "{{ config_location | dirname }}"
+        state: directory
+      when: config_location is defined and config_location != git_config
+
+    - name: CONFIGURE | Ensure config is in desired location
+      ansible.builtin.command:
+        cmd: "mv {{ git_config }} {{ config_location }}"
+      when: config_location is defined and config_location != git_config
+
+    - name: CONFIGURE | Ensure user preferences are present
+      with_dict: "{{ user_vars }}"
+      when: user_vars is defined
+      community.general.ini_file:
+        path: "{{ git_config }}"
+        section: "user"
+        option: "\t{{ item.key }}"
+        value: "{{ item.value }}"
+
+    - name: CONFIGURE | Ensure init preferences are present
+      with_dict: "{{ init_vars }}"
+      when: init_vars is defined
+      community.general.ini_file:
+        path: "{{ git_config }}"
+        section: "init"
+        option: "\t{{ item.key }}"
+        value: "{{ item.value }}"
+
+    - name: CONFIGURE | Ensure core preferences are present
+      with_dict: "{{ core_vars }}"
+      when: core_vars is defined
+      community.general.ini_file:
+        path: "{{ git_config }}"
+        section: "core"
+        option: "\t{{ item.key }}"
+        value: "{{ item.value }}"
+
+    - name: CONFIGURE | Ensure gpg preferences are present
+      with_dict: "{{ gpg_vars }}"
+      when: gpg_vars is defined
+      community.general.ini_file:
+        path: "{{ git_config }}"
+        section: "gpg"
+        option: "\t{{ item.key }}"
+        value: "{{ item.value }}"
+
+    - name: CONFIGURE | Ensure gpg ssh preferences are present
+      with_dict: "{{ gpg_ssh_vars }}"
+      when: gpg_ssh_vars is defined
+      community.general.ini_file:
+        path: "{{ git_config }}"
+        section: 'gpg "ssh"'
+        option: "\t{{ item.key }}"
+        value: "{{ item.value }}"
+
+    - name: CONFIGURE | Ensure commit preferences are present
+      with_dict: "{{ commit_vars }}"
+      when: commit_vars is defined
+      community.general.ini_file:
+        path: "{{ git_config }}"
+        section: "commit"
+        option: "\t{{ item.key }}"
+        value: "{{ item.value }}"
+
+    - name: CONFIGURE | Ensure push preferences are present
+      with_dict: "{{ push_vars }}"
+      when: push_vars is defined
+      community.general.ini_file:
+        path: "{{ git_config }}"
+        section: "push"
+        option: "\t{{ item.key }}"
+        value: "{{ item.value }}"
+
+    - name: CONFIGURE | Ensure alias preferences are present
+      with_dict: "{{ alias_vars }}"
+      when: alias_vars is defined
+      community.general.ini_file:
+        path: "{{ git_config }}"
+        section: "alias"
+        option: "\t{{ item.key }}"
+        value: "{{ item.value }}"
+
+    - name: CONFIGURE | Ensure color preferences are present
+      with_dict: "{{ color_vars }}"
+      when: color_vars is defined
+      community.general.ini_file:
+        path: "{{ git_config }}"
+        section: "color"
+        option: "\t{{ item.key }}"
+        value: "{{ item.value }}"
+
+    - name: CONFIGURE | Ensure color branch preferences are present
+      with_dict: "{{ color_branch_vars }}"
+      when: color_branch_vars is defined
+      community.general.ini_file:
+        path: "{{ git_config }}"
+        section: 'color "branch"'
+        option: "\t{{ item.key }}"
+        value: "{{ item.value }}"
+
+    - name: CONFIGURE | Ensure color diff preferences are present
+      with_dict: "{{ color_diff_vars }}"
+      when: color_diff_vars is defined
+      community.general.ini_file:
+        path: "{{ git_config }}"
+        section: 'color "diff"'
+        option: "\t{{ item.key }}"
+        value: "{{ item.value }}"
+
+    - name: CONFIGURE | Ensure color status preferences are present
+      with_dict: "{{ color_status_vars }}"
+      when: color_status_vars is defined
+      community.general.ini_file:
+        path: "{{ git_config }}"
+        section: 'color "status"'
+        option: "\t{{ item.key }}"
+        value: "{{ item.value }}"
+
+    - name: CONFIGURE | Ensure github url preferences are present
+      with_dict: "{{ url_github_vars }}"
+      when: url_github_vars is defined
+      community.general.ini_file:
+        path: "{{ git_config }}"
+        section: 'url "https://github.com/"'
+        option: "\t{{ item.key }}"
+        value: "{{ item.value }}"
