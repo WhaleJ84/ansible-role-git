@@ -47,7 +47,7 @@
       with_dict: "{{ user_vars }}"
       when: user_vars is defined
       community.general.ini_file:
-        path: "{{ git_config }}"
+        path: "{{ config_location }}"
         section: "user"
         option: "\t{{ item.key }}"
         value: "{{ item.value }}"
@@ -56,7 +56,7 @@
       with_dict: "{{ init_vars }}"
       when: init_vars is defined
       community.general.ini_file:
-        path: "{{ git_config }}"
+        path: "{{ config_location }}"
         section: "init"
         option: "\t{{ item.key }}"
         value: "{{ item.value }}"
@@ -65,7 +65,7 @@
       with_dict: "{{ core_vars }}"
       when: core_vars is defined
       community.general.ini_file:
-        path: "{{ git_config }}"
+        path: "{{ config_location }}"
         section: "core"
         option: "\t{{ item.key }}"
         value: "{{ item.value }}"
@@ -74,7 +74,7 @@
       with_dict: "{{ gpg_vars }}"
       when: gpg_vars is defined
       community.general.ini_file:
-        path: "{{ git_config }}"
+        path: "{{ config_location }}"
         section: "gpg"
         option: "\t{{ item.key }}"
         value: "{{ item.value }}"
@@ -83,7 +83,7 @@
       with_dict: "{{ gpg_ssh_vars }}"
       when: gpg_ssh_vars is defined
       community.general.ini_file:
-        path: "{{ git_config }}"
+        path: "{{ config_location }}"
         section: 'gpg "ssh"'
         option: "\t{{ item.key }}"
         value: "{{ item.value }}"
@@ -92,7 +92,7 @@
       with_dict: "{{ commit_vars }}"
       when: commit_vars is defined
       community.general.ini_file:
-        path: "{{ git_config }}"
+        path: "{{ config_location }}"
         section: "commit"
         option: "\t{{ item.key }}"
         value: "{{ item.value }}"
@@ -101,7 +101,7 @@
       with_dict: "{{ push_vars }}"
       when: push_vars is defined
       community.general.ini_file:
-        path: "{{ git_config }}"
+        path: "{{ config_location }}"
         section: "push"
         option: "\t{{ item.key }}"
         value: "{{ item.value }}"
@@ -110,7 +110,7 @@
       with_dict: "{{ alias_vars }}"
       when: alias_vars is defined
       community.general.ini_file:
-        path: "{{ git_config }}"
+        path: "{{ config_location }}"
         section: "alias"
         option: "\t{{ item.key }}"
         value: "{{ item.value }}"
@@ -119,7 +119,7 @@
       with_dict: "{{ color_vars }}"
       when: color_vars is defined
       community.general.ini_file:
-        path: "{{ git_config }}"
+        path: "{{ config_location }}"
         section: "color"
         option: "\t{{ item.key }}"
         value: "{{ item.value }}"
@@ -128,7 +128,7 @@
       with_dict: "{{ color_branch_vars }}"
       when: color_branch_vars is defined
       community.general.ini_file:
-        path: "{{ git_config }}"
+        path: "{{ config_location }}"
         section: 'color "branch"'
         option: "\t{{ item.key }}"
         value: "{{ item.value }}"
@@ -137,7 +137,7 @@
       with_dict: "{{ color_diff_vars }}"
       when: color_diff_vars is defined
       community.general.ini_file:
-        path: "{{ git_config }}"
+        path: "{{ config_location }}"
         section: 'color "diff"'
         option: "\t{{ item.key }}"
         value: "{{ item.value }}"
@@ -146,7 +146,7 @@
       with_dict: "{{ color_status_vars }}"
       when: color_status_vars is defined
       community.general.ini_file:
-        path: "{{ git_config }}"
+        path: "{{ config_location }}"
         section: 'color "status"'
         option: "\t{{ item.key }}"
         value: "{{ item.value }}"
@@ -155,7 +155,7 @@
       with_dict: "{{ url_github_vars }}"
       when: url_github_vars is defined
       community.general.ini_file:
-        path: "{{ git_config }}"
+        path: "{{ config_location }}"
         section: 'url "https://github.com/"'
         option: "\t{{ item.key }}"
         value: "{{ item.value }}"
