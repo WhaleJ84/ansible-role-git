@@ -43,6 +43,11 @@
         removes: "{{ git_config }}"
       when: config_location is defined and config_location != git_config
 
+    - name: CONFIGURE | Ensure allowed_signers file is present
+      ansible.builtin.copy:
+        src: "allowed_signers"
+        dest: "{{ ansible_user_dir }}/.ssh/allowed_signers"
+
     - name: CONFIGURE | Ensure user preferences are present
       with_dict: "{{ user_vars }}"
       when: user_vars is defined
