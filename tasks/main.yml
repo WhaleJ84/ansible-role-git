@@ -23,19 +23,25 @@
     - name: CONFIGURE | Set found config to variable
       with_items: "{{ path_checks.results }}"
       ansible.builtin.set_fact:
-        git_config: "{{ item.stat.path }}"
+        existing_config: "{{ item.stat.path }}"
       when: item.stat.exists
+
+    - name: CONFIGURE | Set default git config if none found
+      ansible.builtin.set_fact:
+        existing_config: "{{ ansible_user_dir }}/.gitconfig"
+      when: "'existing_config' not in ansible_facts"
 
     - name: CONFIGURE | Ensure config path exists
       ansible.builtin.file:
         path: "{{ config_location | dirname }}"
         state: directory
-      when: config_location is defined and config_location != git_config
+      when: config_location is defined
 
     - name: CONFIGURE | Ensure config is in desired location
       ansible.builtin.command:
-        cmd: "mv {{ git_config }} {{ config_location }}"
-      when: config_location is defined and config_location != git_config
+        cmd: "mv {{ existing_config }} {{ config_location }}"
+        removes: "{{ existing_config }}"
+      when: config_location is defined and config_location != existing_config
 
     - name: CONFIGURE | Ensure user preferences are present
       with_dict: "{{ user_vars }}"
