@@ -43,6 +43,13 @@
         removes: "{{ git_config }}"
       when: config_location is defined and config_location != git_config
 
+    - name: CONFIGURE | Ensure ignore file exists when defined
+      ansible.builtin.file:
+        path: "{{ config_location | dirname }}/ignore"
+        state: touch
+      changed_when: False
+      when: config_location is defined and ignore is defined
+
     - name: CONFIGURE | Ensure allowed_signers file is present
       ansible.builtin.copy:
         src: "allowed_signers"
@@ -164,3 +171,12 @@
         section: 'url "https://github.com/"'
         option: "\t{{ item.key }}"
         value: "{{ item.value }}"
+    
+    - name: CONFIGURE | Ensure ignore strings are present
+      when: ignore is defined
+      ansible.builtin.copy:
+        dest: "{{ config_location | dirname }}/ignore"
+        content: |
+          {% for line in ignore %}
+          {{ line }}
+          {% endfor %}
