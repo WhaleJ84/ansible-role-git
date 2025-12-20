@@ -35,7 +35,7 @@ This example playbook shows how I would use this role, with custom variables to 
 - hosts: localhost
 
   roles:
-    role: whalej84.git
-    tags: [ git ]
+    - role: whalej84.git
+      tags: [ git ]
 ```
 
